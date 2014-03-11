@@ -75,6 +75,13 @@ feature 'Admin panel' do
       }
     end
 
-    it "can go to the admin homepage by clicking the Admin welcome page link"
+    it "can go to the admin homepage by clicking the Admin welcome page link" do
+      visit admin_post_url(post)
+
+      expect{
+        click_link("Admin welcome page")
+        response.should redirect_to(admin_posts_url)
+      }
+    end
   end
 end
