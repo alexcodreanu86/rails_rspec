@@ -1,6 +1,5 @@
 class Admin::PostsController < ApplicationController
-
-    before_filter :authenticate, :only => :index
+  before_filter :authenticate, :only => :index
 
   def index
     @posts = Post.all

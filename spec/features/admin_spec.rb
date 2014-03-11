@@ -55,9 +55,25 @@ feature 'Admin panel' do
   end
 
   context "on post show page" do
-    it "can visit a post show page by clicking the title"
+    let(:post) {Post.create(title: "test", content: "so testy", is_published: true) }
 
-    it "can see an edit link that takes you to the edit post path"
+    it "can visit a post show page by clicking the title" do
+      visit admin_posts_url
+
+      expect{
+        click_link("Test")
+        response.should redirect_to(admin_post_url)
+      }
+    end
+
+    it "can see an edit link that takes you to the edit post path" do
+      visit admin_post_url(post)
+
+      expect{
+        click_link("Edit")
+        response.should redirect_to(edit_admin_post_url)
+      }
+    end
 
     it "can go to the admin homepage by clicking the Admin welcome page link"
   end
