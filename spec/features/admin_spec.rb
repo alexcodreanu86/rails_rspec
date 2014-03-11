@@ -2,8 +2,10 @@ require 'spec_helper'
 
 feature 'Admin panel' do
   context "on admin homepage" do
-    let(:post) {Post.create(title: "test", content: "so testy", is_published: true) }
+
     it "can see a list of recent posts" do
+      post = Post.create(title: "test", content: "so testy", is_published: true)
+      page.driver.browser.authorize 'geek', 'jock'
       visit admin_posts_url
       expect {
         response.body.should have_link("Test")
@@ -12,6 +14,8 @@ feature 'Admin panel' do
     end
 
     it "can edit a post by clicking the edit link next to a post" do
+      post = Post.create(title: "test", content: "so testy", is_published: true)
+      page.driver.browser.authorize 'geek', 'jock'
       visit admin_posts_url
       expect {
         click_link("Edit")
@@ -32,7 +36,9 @@ feature 'Admin panel' do
 
 
     it "can create a new post and view it" do
-       visit new_admin_post_url
+      post = Post.create(title: "test", content: "so testy", is_published: true)
+      page.driver.browser.authorize 'geek', 'jock'
+      visit new_admin_post_url
 
        expect {
          fill_in 'post_title',   with: "Hello world!"
@@ -49,6 +55,7 @@ feature 'Admin panel' do
   context "editing post" do
     it "can mark an existing post as unpublished" do
       post = Post.create(title: "test", content: "so testy", is_published: true)
+      page.driver.browser.authorize 'geek', 'jock'
       visit edit_admin_post_url(post)
       expect{
         page.uncheck('post_is_published')
@@ -60,18 +67,19 @@ feature 'Admin panel' do
   end
 
   context "on post show page" do
-    let(:post) {Post.create(title: "test", content: "so testy", is_published: true) }
 
     it "can visit a post show page by clicking the title" do
-      visit admin_posts_url
+      post = Post.create(title: "test", content: "so testy", is_published: true)
+      page.driver.browser.authorize 'geek', 'jock'
+      visit ("admin/posts")
 
-      expect{
-        click_link("Test")
-        response.should redirect_to(admin_post_url)
-      }
+      click_link("#{post.title}")
+      expect(page).to have_content("#{post.title}")
     end
 
     it "can see an edit link that takes you to the edit post path" do
+      post = Post.create(title: "test", content: "so testy", is_published: true)
+      page.driver.browser.authorize 'geek', 'jock'
       visit admin_post_url(post)
 
       expect{
@@ -81,12 +89,12 @@ feature 'Admin panel' do
     end
 
     it "can go to the admin homepage by clicking the Admin welcome page link" do
+      post = Post.create(title: "test", content: "so testy", is_published: true)
+      page.driver.browser.authorize 'geek', 'jock'
       visit admin_post_url(post)
 
-      expect{
-        click_link("Admin welcome page")
-        response.should redirect_to(admin_posts_url)
-      }
+      click_link("Admin welcome page")
+      expect(page).to have_content("Welcome to the admin panel!")
     end
   end
 end

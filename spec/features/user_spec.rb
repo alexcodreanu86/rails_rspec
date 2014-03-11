@@ -2,11 +2,13 @@ require 'spec_helper'
 
 feature 'User browsing the website' do
   context "on homepage" do
+    let(:post) {Post.create(title: "test", content: "so testy", is_published: true) }
+
     it "sees a list of recent posts titles" do
-      pending
-      # given a user and a list of posts
-      # user visits the homepage
-      # user can see the posts titles
+      visit posts_url
+      expect {
+        response.body.should have_link("Test")
+      }
     end
 
     it "can click on titles of recent posts and should be on the post show page" do
