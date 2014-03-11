@@ -2,8 +2,8 @@ require 'spec_helper'
 
 feature 'Admin panel' do
   context "on admin homepage" do
+    let(:post) {Post.create(title: "test", content: "so testy", is_published: true) }
     it "can see a list of recent posts" do
-      Post.create(title: "test", content: "so testy", is_published: true)
       visit admin_posts_url
 
       expect {
@@ -12,7 +12,15 @@ feature 'Admin panel' do
 
     end
 
-    it "can edit a post by clicking the edit link next to a post"
+    it "can edit a post by clicking the edit link next to a post" do
+      visit admin_posts_url
+
+      expect {
+        click_link("Edit")
+        response.should redirect_to(edit_admin_post_url)
+      }
+
+    end
 
     it "can delete a post by clicking the delete link next to a post"
 
