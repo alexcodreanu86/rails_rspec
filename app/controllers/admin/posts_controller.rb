@@ -1,4 +1,7 @@
 class Admin::PostsController < ApplicationController
+
+    before_filter :authenticate, :only => :index
+
   def index
     @posts = Post.all
   end
@@ -48,4 +51,13 @@ class Admin::PostsController < ApplicationController
   def post_params
     params.require(:post).permit(:title, :content, :is_published)
   end
+
+  protected
+
+  def authenticate
+    authenticate_or_request_with_http_basic do |user, pw|
+      user == "geek" && pw == "jock"
+    end
+  end
+
 end
