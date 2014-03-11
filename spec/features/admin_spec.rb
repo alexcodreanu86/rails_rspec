@@ -2,7 +2,15 @@ require 'spec_helper'
 
 feature 'Admin panel' do
   context "on admin homepage" do
-    it "can see a list of recent posts"
+    it "can see a list of recent posts" do
+      Post.create(title: "test", content: "so testy", is_published: true)
+      visit admin_posts_url
+
+      expect {
+        response.body.should have_link("Test")
+      }
+
+    end
 
     it "can edit a post by clicking the edit link next to a post"
 
