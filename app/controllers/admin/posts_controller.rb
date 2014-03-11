@@ -40,7 +40,7 @@ class Admin::PostsController < ApplicationController
   end
 
   def destroy
-    post = Post.find(params[:destroy])
+    post = Post.find(params[:id])
     post.destroy
 
     redirect_to admin_posts_url

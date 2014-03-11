@@ -5,7 +5,6 @@ feature 'Admin panel' do
     let(:post) {Post.create(title: "test", content: "so testy", is_published: true) }
     it "can see a list of recent posts" do
       visit admin_posts_url
-
       expect {
         response.body.should have_link("Test")
       }
@@ -14,7 +13,6 @@ feature 'Admin panel' do
 
     it "can edit a post by clicking the edit link next to a post" do
       visit admin_posts_url
-
       expect {
         click_link("Edit")
         response.should redirect_to(edit_admin_post_url)
@@ -22,7 +20,16 @@ feature 'Admin panel' do
 
     end
 
-    it "can delete a post by clicking the delete link next to a post"
+    it "can delete a post by clicking the delete link next to a post" do
+      Post.create(title: "test1", content: "so testy1", is_published: true)
+      page.driver.browser.authorize 'geek', 'jock'
+      visit admin_posts_url
+
+      expect {
+        click_link("Delete")
+       }.to change(Post, :count).by(-1)
+    end
+
 
     it "can create a new post and view it" do
        visit new_admin_post_url
